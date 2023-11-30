@@ -1,0 +1,7 @@
+﻿  main.cpp
+C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\OpenGLProject\main.cpp(10,31): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\OpenGLProject\main.cpp(10,38): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\OpenGLProject\main.cpp(10,44): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\OpenGLProject\main.cpp(18,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\OpenGLProject\main.cpp(23,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  OpenGLProject.vcxproj -> C:\Users\tobey\Documents\GitHub\OpenGL\OpenGLProject\Debug\OpenGLProject.exe
