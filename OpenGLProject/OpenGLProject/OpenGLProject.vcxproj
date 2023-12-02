@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glfw\include;C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glfw\include;C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glew\include;C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glm\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +131,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLProject.cpp" />
+    <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="Shaders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="base.frag" />
+    <None Include="base.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
