@@ -45,10 +45,14 @@ void Camera::SetResolution(int inputWidth, int inputHeight) {
 void Camera::Update(float fov,float planeNear,float planeFar,const char* uniform) {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-	float aspect = float(width / height);
+	if (height != 0) {
+		float aspect = float(width / height);
+		view = glm::lookAt(position, position + orientation, up);
+		projection = glm::perspective(glm::radians(fov), aspect, planeNear, planeFar);
+	}
 
-	view = glm::lookAt(position, position + orientation, up);
-	projection = glm::perspective(glm::radians(fov), aspect, planeNear, planeFar);
+
+
  
 }
 

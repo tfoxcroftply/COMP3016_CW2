@@ -1,9 +1,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/common.hpp>
-#include <iostream>
 #include <Windows.h>
 #include "Camera.h"
+#include <iostream>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
+#include <format>
+#include <sstream>
 
 using namespace std;
 
@@ -11,16 +16,32 @@ int ResX = 1280;
 int ResY = 720;
 int desiredFramerate = 60;
 
-
 float backgroundRGB[3] = { 51,102,255 };
 
-void error(string error) {
-    glfwTerminate();
-    system("cls");
-    cout << "Program has been terminated due to an error" << endl;
-    if (error != "" && &error != nullptr) {
-        cout << "An error reason has been provided by the program: " << error << endl;
+enum class LogType { General, Error, Fatal };
+
+void log(std::string Input, LogType InputLogType = LogType::General) {
+    auto currentTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    tm* localTime = std::localtime(&currentTime);
+
+    std::stringstream ss;
+
+    // Format hours, minutes, seconds
+    ss << std::put_time(localTime, "%T");
+
+    // Get milliseconds
+    auto now = std::chrono::system_clock::now();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+    // Append milliseconds to the stringstream
+    ss << '.' << std::setfill('0') << std::setw(3) << ms.count();
+
+    string Placeholder = "";
+    if (InputLogType == LogType::Error) {
+        Placeholder = "FATAL: ";
     }
+
+    cout << "[" << ss.str() << "]: " << Placeholder << Input << endl;
 }
 
 GLFWwindow* mainWindow;
@@ -68,10 +89,10 @@ void renderFrame() {
 
 int main(int argc, char *argv[])
 {
-    cout << "Starting program\n";
+    log("Starting program");
 
     if (!glfwInit()) {
-        error("Glfw failed to start");
+        log("Glfw failed to start",LogType::Fatal);
         glfwTerminate();
 ;       return -1;
     }
@@ -83,7 +104,7 @@ int main(int argc, char *argv[])
 
     GLenum errorCode = glewInit();
     if (errorCode != GLEW_OK) {
-        error("Glew failed to start");
+        log("GLEW failed to start",LogType::Error);
         cout << glewGetErrorString(errorCode);
         glfwTerminate();
         return -1;
@@ -94,7 +115,7 @@ int main(int argc, char *argv[])
     mainCamera.SetResolution(1280, 720);
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    //glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
     while (!glfwWindowShouldClose(mainWindow) || !mainWindow) {  

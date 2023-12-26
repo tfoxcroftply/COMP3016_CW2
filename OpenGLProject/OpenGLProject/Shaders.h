@@ -4,13 +4,13 @@
 
 using namespace std;
 
-string LoadFile(string requestName) {
-	ifstream in(requestName,ios::binary);
+/* string LoadFile(string requestName) {
+	ifstream in(requestName, ios::binary);
 	string content = "";
 	if (in) {
 
 	}
-}
+} */
 
 class Shader {
 public:
