@@ -2,10 +2,3 @@
   OpenGLProject.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glfw\include\GLFW\glfw3.h(123,1): message : see previous definition of 'APIENTRY'
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  OpenGLProject.vcxproj -> C:\Users\tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\x64\Debug\OpenGLProject.exe
-  C:\Users\tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.frag
-  C:\Users\tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.vert
-  2 File(s) copied
-  C:\Users\tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\glew32.dll
-  1 File(s) copied
