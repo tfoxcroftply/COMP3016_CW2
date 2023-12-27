@@ -113,6 +113,13 @@
       <AdditionalLibraryDirectories>C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glew\lib\Release\x64;C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\Resources\glfw\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+      <Command>xcopy "$(ProjectDir)resources" "$(TargetDir)resources" /e /y /i /r
+xcopy "$(ProjectDir)glew32.dll" "$(TargetDir)" /e /y /r
+if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -137,10 +144,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Log.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="base.frag" />
-    <None Include="base.vert" />
+    <None Include="glew32.dll" />
+    <None Include="resources\shaders\base.frag" />
+    <None Include="resources\shaders\base.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,26 +1,21 @@
-#include <GL/glew.h>;
-#include <fstream>;
-#include <iostream>;
+#ifndef __LOAD_SHADERS_H__
+#define __LOAD_SHADERS_H__
 
-using namespace std;
+#include "GL/glew.h"
 
-/* string LoadFile(string requestName) {
-	ifstream in(requestName, ios::binary);
-	string content = "";
-	if (in) {
+#ifdef __cplusplus
+extern "C" {
+#endif
+	typedef struct {
+		GLenum       type;
+		const char* filename;
+		GLuint       shader;
+	} ShaderInfo;
 
-	}
-} */
+	GLuint LoadShaders(ShaderInfo*);
 
-class Shader {
-public:
-	GLuint ID;
-
-	Shader(string vertFile, string fragFile) {};
-
-	void Enable();
+#ifdef __cplusplus
 };
+#endif
 
-void Shader::Enable() {
-	cout << "Enabling shader";
-}
+#endif

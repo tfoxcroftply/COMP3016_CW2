@@ -1,0 +1,1 @@
+[00:05:07.746]: Starting program[00:05:07.844]: GLFW started successfully.[00:05:07.959]: GLEW started successfully.
