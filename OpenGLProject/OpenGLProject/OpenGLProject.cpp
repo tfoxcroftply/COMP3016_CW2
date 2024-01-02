@@ -15,6 +15,7 @@ float CameraSensitivity = 0.05;
 #include "Shaders.h"
 #include "Camera.h"
 #include "Log.h"
+#include "Textures.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -38,18 +39,11 @@ int currentWindowHeight;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-enum VAO_IDs { Triangles, Indices, Colours, Textures};
+enum VAO_IDs { Triangles, Indices, Colours, Textures}; // VAO contents
 GLuint VAOs[NumberOfObjects];
 
-//Buffer types
-enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 };
-
-//Buffer objects
-GLuint Buffers[NumBuffers];
-
-vec3 cameraPosition = vec3(0.0f, 0.0f, 3.0f);
-vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
-vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
+enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer object contents with number of buffers to be set
+GLuint Buffers[NumBuffers]; //Buffer objects
 
 void framebuffer_resize_callback(GLFWwindow* window, int width, int height)
 {
@@ -71,7 +65,6 @@ int main()
     else {
         log("GLFW started successfully.");
     }
-
 
     // Window creation
     GLFWwindow* mainWindow = glfwCreateWindow(ResX, ResY, "OpenGL Demonstration by Tobey Foxcroft", NULL, NULL);
@@ -121,17 +114,14 @@ int main()
     };
 
     unsigned int indices[] = {
-        0, 1, 3, //first triangle
-        1, 2, 3 //second triangle
+        0, 1, 3,
+        1, 2, 3
     };
 
-    //Sets index of VAO
-    glGenVertexArrays(NumberOfObjects, VAOs); //NumVAOs, VAOs
-    //Binds VAO to a buffer
-    glBindVertexArray(VAOs[0]); //VAOs[0]
-    //Sets indexes of all required buffer objects
+    glGenVertexArrays(NumberOfObjects, VAOs); // Generate VAOs
+    glBindVertexArray(VAOs[0]); // Selects first VAO to write to
+
     glGenBuffers(NumBuffers, Buffers); //NumBuffers, Buffers
-    //glGenBuffers(1, &EBO);
 
     //Binds vertex object to array buffer
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[Triangles]); //Buffers[Triangles]
@@ -151,32 +141,15 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    //Unbinding
+
+    //Unbinding everything to prevent errors
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    //Texturea
-    unsigned int texture; //Index
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    int width, height, colourChannels;
-    unsigned char* data = stbi_load("resources/textures/water.jpg", &width, &height, &colourChannels, 0);
-    if (data){
-        log("Textures loaded successfully.");
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
-        log("Textures failed to load.");
-        return -1;
-    }
-
-    // Clear memory
-    stbi_image_free(data);
+    //Texture loading
+    unsigned int texture = GenerateTexture("resources/textures/water.jpg");
 
     //Model matrix
     mat4 model = mat4(1.0f);

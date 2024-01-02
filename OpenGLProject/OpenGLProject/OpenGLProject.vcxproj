@@ -143,12 +143,14 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
     <ClCompile Include="Shaders.h" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Textures.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
