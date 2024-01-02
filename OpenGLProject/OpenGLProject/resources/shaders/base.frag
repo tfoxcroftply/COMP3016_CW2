@@ -1,5 +1,11 @@
-#version 330 core
+#version 460
+//Colour value to send to next stage
 out vec4 FragColor;
-void main(){
-	FragColor = vec4(1.0f,1.0f,1.0f,1.0f);
+//Colour value
+uniform vec4 colourIn;
+
+void main()
+{
+    //RGBA values
+    FragColor = colourIn;
 }

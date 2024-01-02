@@ -23,6 +23,7 @@ private:
 	float sensitivity = 100.0f;
 
 public:
+	string ShaderId;
 	void SetPosition() {
 		return;
 	}
@@ -49,11 +50,9 @@ void Camera::Update(float fov,float planeNear,float planeFar,const char* uniform
 		float aspect = float(width / height);
 		view = glm::lookAt(position, position + orientation, up);
 		projection = glm::perspective(glm::radians(fov), aspect, planeNear, planeFar);
+
+	
 	}
-
-
-
- 
 }
 
 void Camera::InputData(GLFWwindow* inputWindow) {
