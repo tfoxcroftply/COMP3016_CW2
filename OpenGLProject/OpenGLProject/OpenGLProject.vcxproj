@@ -141,10 +141,14 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
     <ClCompile Include="OpenGLProject.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="Shaders.h" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />

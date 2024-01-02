@@ -9,64 +9,32 @@
 #include <iostream>
 
 using namespace std;
+using namespace glm;
 
 class Camera {
 private:
-	glm::vec3 position = glm::vec3(0, 0, 0);
-	glm::vec3 orientation = glm::vec3(0.0f, 0.0f, 1.0f);
-	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    // View
+    vec3 position = vec3(0.0f, 0.0f, 3.0f);
+    vec3 orientation = vec3(0.0f, 0.0f, 1.0f);
+    vec3 front = vec3(0.0f, 0.0f, -1.0f);
+    vec3 up = vec3(0.0f, 1.0f, 0.0f);
 
-	int width;
-	int height;
+    // Variables
+    float speed = 1.0f;
+    float sensitivity = 0.1f;
 
-	float speed = 1.0f;
-	float sensitivity = 100.0f;
-
+    // Mouse
+    float lastMouseX, lastMouseY;
+    float mouseYaw, mousePitch;
+    bool mouseHasMoved = false;
 public:
-	string ShaderId;
-	void SetPosition() {
-		return;
-	}
-	void GetPosition() {
-		return;
-	}
-	void SetSpeed(float inputSpeed) {
-		speed = inputSpeed;
-	}
-	void SetResolution(int inputWidth, int inputHeight);
-	void Update(float FOV, float planeNear, float planeFar, const char* uniform);
-	void InputData(GLFWwindow* inputWindow);
-};
-
-void Camera::SetResolution(int inputWidth, int inputHeight) {
-	width = inputWidth;
-	height = inputHeight;
-}
-
-void Camera::Update(float fov,float planeNear,float planeFar,const char* uniform) {
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	if (height != 0) {
-		float aspect = float(width / height);
-		view = glm::lookAt(position, position + orientation, up);
-		projection = glm::perspective(glm::radians(fov), aspect, planeNear, planeFar);
-
-	
-	}
-}
-
-void Camera::InputData(GLFWwindow* inputWindow) {
-	if (glfwGetKey(inputWindow, GLFW_KEY_W) == GLFW_PRESS) {
-		position += speed * orientation;
-		cout << "Moving";
-	}
-	if (glfwGetKey(inputWindow, GLFW_KEY_A) == GLFW_PRESS) {
-		position += speed * -glm::normalize(glm::cross(orientation,up));
-	}
-	if (glfwGetKey(inputWindow, GLFW_KEY_S) == GLFW_PRESS) {
-		position += speed * -orientation;
-	}
-	if (glfwGetKey(inputWindow, GLFW_KEY_D) == GLFW_PRESS) {
-		position += speed * glm::normalize(glm::cross(orientation, up));
-	}
+    // Functions
+    Camera(){}
+    mat4 GetViewMatrix();
+    void SetSpeed(float inputSpeed);
+    void SetSensitivity(float inputSens);
+    void InputData(GLFWwindow* inputWindow, float delta);
+    void MouseInput(GLFWwindow* inputWindow, double xpos, double ypos);
+    vec3 GetPosition();
+    void SetPosition(vec3 inputPos);
 };
