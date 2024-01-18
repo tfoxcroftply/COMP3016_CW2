@@ -59,6 +59,9 @@
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll">
@@ -70,5 +73,10 @@
     <None Include="resources\shaders\base.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\objects\cube.obj">
+      <Filter>Resource Files\objects</Filter>
+    </Object>
   </ItemGroup>
 </Project>

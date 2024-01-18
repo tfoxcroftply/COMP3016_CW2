@@ -149,6 +149,7 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="ModelLoad.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Textures.h" />
   </ItemGroup>
@@ -156,6 +157,12 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
     <None Include="glew32.dll" />
     <None Include="resources\shaders\base.frag" />
     <None Include="resources\shaders\base.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\objects\cube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

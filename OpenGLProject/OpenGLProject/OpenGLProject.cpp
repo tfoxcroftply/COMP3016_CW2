@@ -16,6 +16,7 @@ float CameraSensitivity = 0.05;
 #include "Camera.h"
 #include "Log.h"
 #include "Textures.h"
+#include "ModelLoad.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -23,14 +24,15 @@ float CameraSensitivity = 0.05;
 int ResX = 1280;
 int ResY = 720;
 float SkyColor[3] = {138,220,255}; // must be float
-float UnderwaterColor[3] = {0,71,135};
-
-const int NumberOfObjects = 2;
+float UnderwaterColor[3] = {0,73,135};
 
 using namespace std;
 using namespace glm;
 
 Camera mainCamera;
+
+const int NumberOfObjects = 1;
+GLuint VAOs[NumberOfObjects];
 
 float minFrameTime = 1 / MaxFPS;
 static int displayInterval;
@@ -38,12 +40,6 @@ int currentWindowWidth;
 int currentWindowHeight;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-enum VAO_IDs { Triangles, Indices, Colours, Textures}; // VAO contents
-GLuint VAOs[NumberOfObjects];
-
-enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer object contents with number of buffers to be set
-GLuint Buffers[NumBuffers]; //Buffer objects
 
 void framebuffer_resize_callback(GLFWwindow* window, int width, int height)
 {
@@ -118,70 +114,82 @@ int main()
         1, 2, 3
     };
 
-    glGenVertexArrays(NumberOfObjects, VAOs); // Generate VAOs
-    glBindVertexArray(VAOs[0]); // Selects first VAO to write to
+    GLuint vbo, ebo;
+    glGenVertexArrays(1, &VAOs[0]);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
 
-    glGenBuffers(NumBuffers, Buffers); //NumBuffers, Buffers
+    glBindVertexArray(VAOs[0]);
 
-    //Binds vertex object to array buffer
-    glBindBuffer(GL_ARRAY_BUFFER, Buffers[Triangles]); //Buffers[Triangles]
-    //Allocates buffer memory for the vertices of the 'Triangles' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //Binding & allocation for indices
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[Indices]); //Buffers[Indices]
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    //Allocation & indexing of vertex attribute memory for vertex shader
-    //Positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    // Position coordinate
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
 
-    //Textures
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    // Texture coordinate
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-
-    //Unbinding everything to prevent errors
-    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
+    glEnable(GL_DEPTH_TEST);
+
+    unsigned int numVertices;
+    GLuint shipVAO = loadOBJ("resources/objects/untitled.obj", numVertices);
 
     //Texture loading
     unsigned int texture = GenerateTexture("resources/textures/water.jpg");
+    unsigned int metaltexture = GenerateTexture("resources/textures/metal.jpg");
+
+
 
     //Model matrix
     mat4 model = mat4(1.0f);
     model = rotate(model, radians(-90.0f), vec3(1.0f, 0.0f, 0.0f)); // Do not use offset or it affects camera
 
+    mat4 model2 = mat4(1.0f);
+    model2 = scale(model2, vec3(0.1f, 0.1f, 0.1f));
+    model2 = translate(model2, vec3(0.0f, 0.5f, 0.0f));
+
     // Camera setup
     mainCamera.SetSpeed(CameraSpeed);
     mainCamera.SetSensitivity(CameraSensitivity);
-    mainCamera.SetPosition(vec3(0.0f, 0.1f, 0.0f));
+    mainCamera.SetPosition(vec3(0.0f, 0.1f, 1.0f));
+
     mat4 projection = perspective(radians(FOV), (float)ResX / (float)ResY, 0.01f, 100.0f);
 
-    int waveHeightLimit = 100;
+    int waveHeightLimit = 200;
     int curWaveHeight = 0;
     bool waveFlip = false;
     float lastWaveMovement = 0;
-    float waveUpdateFreq = 1.0f / 60;
+    float waveUpdateFreq = 1.0f / 120;
+
+    glDisable(GL_CULL_FACE);
+
+    int mvpVar = glGetUniformLocation(program, "mvpIn");
+    int filterVar = glGetUniformLocation(program, "applyFilter");
 
     log("Starting render loop.");
     while (!glfwWindowShouldClose(mainWindow) && mainWindow)
     {
-        //Time
+        // Time management
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
         if (mainCamera.GetPosition().y >= 0) {
             glClearColor(SkyColor[0] / 255, SkyColor[1] / 255, SkyColor[2] / 255, 1);
+            glUniform1i(filterVar, 0);
         } else {
             glClearColor(UnderwaterColor[0] / 255, UnderwaterColor[1] / 255, UnderwaterColor[2] / 255, 1);
+            glUniform1i(filterVar, 1);
         }
-
-
 
         if (currentFrame > lastWaveMovement + waveUpdateFreq) {
             lastWaveMovement = currentFrame;
@@ -213,13 +221,23 @@ int main()
         //Transformations
         mat4 view = mainCamera.GetViewMatrix(); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
         mat4 mvp = projection * view * model;
-        int mvpLoc = glGetUniformLocation(program, "mvpIn");
-        glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, value_ptr(mvp));
 
-        //Drawing
+        glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp));
+
+        //Drawing quad
         glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(VAOs[0]); //Bind buffer object to render; VAOs[0]
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(VAOs[0]);
+        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0);
+
+
+        //Transformations
+        mat4 view2 = mainCamera.GetViewMatrix(); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
+        mat4 mvp2 = projection * view * model2;
+        glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp2));
+
+        glBindTexture(GL_TEXTURE_2D, metaltexture);
+        glBindVertexArray(shipVAO);
+        glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, 0);
 
         //Refreshing
         glfwSwapBuffers(mainWindow); //Swaps the colour buffer
