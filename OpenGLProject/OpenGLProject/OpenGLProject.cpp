@@ -141,7 +141,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     unsigned int numVertices;
-    GLuint shipVAO = loadOBJ("resources/objects/untitled.obj", numVertices);
+    GLuint shipVAO = loadOBJ("resources/objects/ship.obj", numVertices);
 
     //Texture loading
     unsigned int texture = GenerateTexture("resources/textures/water.jpg");
@@ -169,6 +169,8 @@ int main()
     bool waveFlip = false;
     float lastWaveMovement = 0;
     float waveUpdateFreq = 1.0f / 120;
+
+
 
     glDisable(GL_CULL_FACE);
 
