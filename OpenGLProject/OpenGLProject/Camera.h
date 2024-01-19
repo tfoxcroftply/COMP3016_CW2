@@ -19,6 +19,7 @@ private:
     vec3 front = vec3(0.0f, 0.0f, -1.0f);
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
 
+
     // Variables
     float speed = 1.0f;
     float sensitivity = 0.1f;
@@ -30,7 +31,11 @@ private:
 public:
     // Functions
     Camera(){}
+
+    mat4 projection = mat4(0.0f);
+    
     mat4 GetViewMatrix();
+    void SetProjection(mat4 input);
     void SetSpeed(float inputSpeed);
     void SetSensitivity(float inputSens);
     void InputData(GLFWwindow* inputWindow, float delta);

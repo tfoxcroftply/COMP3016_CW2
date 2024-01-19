@@ -6,13 +6,14 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "ObjectData.h"
 
 struct Vertex {
     float position[3];
     float texCoord[2];
 };
 
-GLuint& loadOBJ(const char* path, unsigned int& numElements) {
+ObjectData loadOBJ(const char* path) {
     std::vector<float> temp_vertices; // Temporary vertex positions
     std::vector<float> temp_texCoords; // Temporary texture coordinates
     std::vector<Vertex> vertices; // Final vertex data
@@ -67,8 +68,6 @@ GLuint& loadOBJ(const char* path, unsigned int& numElements) {
         }
     }
 
-    numElements = vertices.size();
-
     cout << glGetError();
 
     GLuint vbo, ebo;
@@ -95,5 +94,5 @@ GLuint& loadOBJ(const char* path, unsigned int& numElements) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    return vao;
+    return { vao, static_cast<GLsizei>(indices.size()) };
 }
