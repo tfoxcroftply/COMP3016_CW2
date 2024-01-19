@@ -7,6 +7,9 @@
 #include <sstream>
 #include <string>
 #include "ObjectData.h"
+#include "Log.h"
+
+using namespace std;
 
 struct Vertex {
     float position[3];
@@ -14,17 +17,15 @@ struct Vertex {
 };
 
 ObjectData loadOBJ(const char* path) {
-    std::vector<float> temp_vertices; // Temporary vertex positions
-    std::vector<float> temp_texCoords; // Temporary texture coordinates
-    std::vector<Vertex> vertices; // Final vertex data
-    std::vector<unsigned int> indices;
-    std::ifstream file(path);
-    std::string line;
-
-    GLuint vao;
+    vector<float> temp_vertices; // Temporary vertex positions
+    vector<float> temp_texCoords; // Temporary texture coordinates
+    vector<Vertex> vertices; // Final vertex data
+    vector<unsigned int> indices;
+    ifstream file(path);
+    string line;
 
     if (!file) {
-        std::cerr << "Object did not load properly." << std::endl;
+        log("Model failed to load. Path: '" + string(path) + "'", LogType::Error);
     }
 
     while (getline(file, line)) {
@@ -68,9 +69,7 @@ ObjectData loadOBJ(const char* path) {
         }
     }
 
-    cout << glGetError();
-
-    GLuint vbo, ebo;
+    GLuint vao, vbo, ebo;
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ebo);

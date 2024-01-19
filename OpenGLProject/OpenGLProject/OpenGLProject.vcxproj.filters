@@ -71,6 +71,9 @@
     <ClInclude Include="QuadLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll">

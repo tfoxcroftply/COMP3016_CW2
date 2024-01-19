@@ -151,6 +151,7 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ModelObject.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="ModelLoad.h" />

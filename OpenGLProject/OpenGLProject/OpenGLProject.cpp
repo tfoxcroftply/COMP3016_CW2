@@ -20,6 +20,7 @@ float CameraSensitivity = 0.05;
 #include "ProceduralGeneration.h"
 #include "ObjectData.h"
 #include "QuadLoader.h"
+#include "ModelObject.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -105,6 +106,10 @@ int main()
     glUseProgram(program);
     log("Shaders successfully loaded.");
 
+    int mvpVar = glGetUniformLocation(program, "mvpIn");
+    int filterVar = glGetUniformLocation(program, "applyFilter");
+    int isSand = glGetUniformLocation(program, "isSand"); // For disabling texture coordinates
+
 
     // Window settings
     glViewport(0, 0, ResX, ResY);
@@ -112,32 +117,33 @@ int main()
     glfwSetCursorPosCallback(mainWindow, mouse_callback);
     glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    ObjectData Quad = GetQuad();
-    ObjectData Ship = loadOBJ("resources/objects/ship.obj");
-    ObjectData Terrain = GenerateTerrain(sandNodes[0],sandNodes[1]);
+    // Ship model
+    ModelObject Ship;
+    Ship.data = loadOBJ("resources/objects/ship.obj");
+    Ship.ApplyTexture("resources/textures/metal.png");
 
-    glEnable(GL_DEPTH_TEST);
-
-    //Texture loading
-    unsigned int waterTexture = GenerateTexture("resources/textures/water.png");
-    unsigned int metalTexture = GenerateTexture("resources/textures/metal.png");
-    unsigned int sandTexture = GenerateTexture("resources/textures/sand.png");
+    Ship.projection = scale(Ship.projection, vec3(0.1f, 0.1f, 0.1f));
+    Ship.projection = translate(Ship.projection, vec3(0.0f, 0.5f, 0.0f));
 
 
-    //Model matrix
-    mat4 model = mat4(1.0f);
-    model = rotate(model, radians(-90.0f), vec3(1.0f, 0.0f, 0.0f)); // Do not use offset or it affects camera
-    model = translate(model, vec3(0.0f, 0.0f, -1.0f));
-    model = scale(model, vec3(2.0f, 2.0f, 2.0f));
+    // Sand model
+    ModelObject Sand;
+    Sand.data = GetQuad();
+    Sand.ApplyTexture("resources/textures/sand.png");
 
-    mat4 model2 = mat4(1.0f);
-    model2 = scale(model2, vec3(0.1f, 0.1f, 0.1f));
-    model2 = translate(model2, vec3(0.0f, 0.5f, 0.0f));
+    Sand.projection = rotate(Sand.projection, radians(-90.0f), vec3(1.0f, 0.0f, 0.0f)); // Do not use offset or it affects camera
+    Sand.projection = translate(Sand.projection, vec3(0.0f, 0.0f, -1.0f));
+    Sand.projection = scale(Sand.projection, vec3(2.0f, 2.0f, 2.0f));
 
-    //Model matrix
-    mat4 model3 = mat4(1.0f);
-    model3 = translate(model3, vec3(-3.0f, 0.0f, -3.0f));
-    model3 = scale(model3, vec3(0.9f, 1.0f, 0.9f));
+    // Water model
+    ModelObject Water;
+    Water.data = GenerateTerrain(sandNodes[0], sandNodes[1]);
+    Water.ApplyTexture("resources/textures/water.png");
+
+    Water.projection = translate(Water.projection, vec3(-3.0f, 0.0f, -3.0f));
+    Water.projection = scale(Water.projection, vec3(0.9f, 1.0f, 0.9f));
+
+    reference_wrapper<ModelObject> ModelsToRender[] = { Ship, Sand, Water };
 
     // Camera setup
     mainCamera.SetSpeed(CameraSpeed);
@@ -145,14 +151,8 @@ int main()
     mainCamera.SetPosition(vec3(0.0f, 0.1f, 1.0f));
     mainCamera.projection = perspective(radians(FOV), (float)ResX / (float)ResY, 0.01f, 100.0f);
 
-
-
-
     glDisable(GL_CULL_FACE);
-
-    int mvpVar = glGetUniformLocation(program, "mvpIn");
-    int filterVar = glGetUniformLocation(program, "applyFilter");
-    int isSand = glGetUniformLocation(program, "isSand"); // For disabling texture coordinates
+    glEnable(GL_DEPTH_TEST);
 
     log("Starting render loop.");
     while (!glfwWindowShouldClose(mainWindow) && mainWindow)
@@ -175,7 +175,7 @@ int main()
             if (waveFlip) {
                 if (curWaveHeight < waveHeightLimit) {
                     curWaveHeight++;
-                    model3 = translate(model3, vec3(0.0f, -0.0001f, -0.0001f));
+                    Water.projection = translate(Water.projection, vec3(0.0f, -0.0001f, -0.0001f));
                 }
                 else {
                     waveFlip = !waveFlip;
@@ -183,7 +183,7 @@ int main()
             } else {
                 if (curWaveHeight > 0) {
                     curWaveHeight--;
-                    model3 = translate(model3, vec3(0.0f, 0.0001f, 0.0001f));
+                    Water.projection = translate(Water.projection, vec3(0.0f, 0.0001f, 0.0001f));
                 }
                 else {
                     waveFlip = !waveFlip;
@@ -198,42 +198,18 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+        mat4 projection = mainCamera.projection;
+        mat4 view = mainCamera.GetViewMatrix();
 
-        //Transformations
-        mat4 view = mainCamera.GetViewMatrix(); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
-        mat4 mvp = mainCamera.projection * view * model;
-        glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp));
+        for (auto& modelRef : ModelsToRender) {
+            ModelObject& currentObject = modelRef.get();
+            mat4 mvp = projection * view * currentObject.projection;
+            glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp));
 
-        //Drawing quad
-        glBindTexture(GL_TEXTURE_2D, sandTexture);
-        glBindVertexArray(Quad.vao);
-        glDrawElements(GL_TRIANGLES, Quad.vertexCount, GL_UNSIGNED_INT, 0);
-
-
-
-        //Transformations
-        mat4 view2 = mainCamera.GetViewMatrix(); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
-        mat4 mvp2 = mainCamera.projection * view * model2;
-        glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp2));
-
-        glBindTexture(GL_TEXTURE_2D, metalTexture);
-        glBindVertexArray(Ship.vao);
-        glDrawElements(GL_TRIANGLES, Ship.vertexCount, GL_UNSIGNED_INT, 0);
-
-
-        //Transformations
-        mat4 view3 = mainCamera.GetViewMatrix(); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
-        mat4 mvp3 = mainCamera.projection * view * model3;
-        glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp3));
-
-
-        //Drawing quad
-        glBindTexture(GL_TEXTURE_2D, waterTexture);
-        glBindVertexArray(Terrain.vao);
-        glDrawElements(GL_TRIANGLES, Terrain.vertexCount, GL_UNSIGNED_INT, 0);
-
-
-
+            glBindTexture(GL_TEXTURE_2D, currentObject.GetTexture());
+            glBindVertexArray(currentObject.data.vao);
+            glDrawElements(GL_TRIANGLES, currentObject.data.vertexCount, GL_UNSIGNED_INT, 0);
+        }
 
 
         //Refreshing

@@ -22,12 +22,13 @@ int GenerateTexture(string FileName) {
     int width, height, colourChannels;
     unsigned char* data = stbi_load(FileName.c_str(), &width, &height, &colourChannels, 0);
     if (data) {
-        log("Textures loaded successfully.");
+        log("Texture loaded successfully. Path '" + FileName + "'");
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else {
-        log("Textures failed to load.");
+        return -1;
+        log("Texture failed to load. Path: '" + FileName + "'", LogType::Error);
     }
     return texture;
 
