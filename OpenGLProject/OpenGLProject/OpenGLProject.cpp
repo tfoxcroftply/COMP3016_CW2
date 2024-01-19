@@ -120,7 +120,7 @@ int main()
     // Shader loading
     program = LoadShaders(shaders);
     glUseProgram(program);
-    log("Shaders successfully loaded.");
+
 
     // Shader parameters
     int mvpVar = glGetUniformLocation(program, "mvpIn");

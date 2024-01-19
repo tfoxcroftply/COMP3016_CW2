@@ -6,9 +6,12 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include "GL/glew.h"
 #include "Shaders.h"
+#include "Log.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +29,7 @@ extern "C" {
 
 		if (!infile) {
 #ifdef _DEBUG
-			std::cerr << "Unable to open file '" << filename << "'" << std::endl;
+			log("Unable to open shader file: '" + std::string(filename) + "'", LogType::Fatal);
 #endif /* DEBUG */
 			return NULL;
 		}
@@ -82,15 +85,16 @@ extern "C" {
 				GLsizei len;
 				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
 
-				GLchar* log = new GLchar[len + 1];
-				glGetShaderInfoLog(shader, len, &len, log);
-				std::cerr << "Shader compilation failed: " << log << std::endl;
-				delete[] log;
+				GLchar* logstring = new GLchar[len + 1];
+				glGetShaderInfoLog(shader, len, &len, logstring);
+				log("Shader compilation failed: '" + std::string(logstring) + "'", LogType::Fatal);
+				delete[] logstring;
 #endif /* DEBUG */
 
 				return 0;
 			}
 
+			log("Shader successfully loaded.");
 			glAttachShader(program, shader);
 
 			++entry;
@@ -105,10 +109,10 @@ extern "C" {
 			GLsizei len;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
 
-			GLchar* log = new GLchar[len + 1];
-			glGetProgramInfoLog(program, len, &len, log);
-			std::cerr << "Shader linking failed: " << log << std::endl;
-			delete[] log;
+			GLchar* logstring = new GLchar[len + 1];
+			glGetProgramInfoLog(program, len, &len, logstring);
+			log("Shader linking failed: '" + std::string(logstring) + "'", LogType::Fatal);
+			delete[] logstring;
 #endif /* DEBUG */
 
 			for (entry = shaders; entry->type != GL_NONE; ++entry) {
