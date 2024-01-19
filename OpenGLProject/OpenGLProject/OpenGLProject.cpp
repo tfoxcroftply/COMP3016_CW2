@@ -1,9 +1,10 @@
 
 // User definable variables
 float FOV = 70;
-float MaxFPS = 144;
-float CameraSpeed = 0.5f;
-float CameraSensitivity = 0.05;
+
+
+
+
 
 #include <GL/glew.h>
 #include "glm/ext/vector_float3.hpp"
@@ -25,21 +26,28 @@ float CameraSensitivity = 0.05;
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+
+// User definable varialbes
+float MaxFPS = 144;
+float CameraSpeed = 0.5f;
+float CameraSensitivity = 0.05;
 int ResX = 1280;
 int ResY = 720;
-float SkyColor[] = {138,220,255}; // must be float
-float UnderwaterColor[] = {0,73,135};
+float SkyColor[] = { 138,220,255 }; // must be float
+float UnderwaterColor[] = { 0,73,135 };
 int waveHeightLimit = 400;
 int waveMovementSpeed = 160; // Steps a second
-float sandNodes[] = {10,10};
+float sandNodes[] = { 10,10 };
 
+
+// Namespaces
 using namespace std;
 using namespace glm;
 
 // Object declaration
 Camera mainCamera;
 
-// Time keeping
+// Time tracking
 float minFrameTime = 1 / MaxFPS;
 static int displayInterval;
 int currentWindowWidth;
@@ -47,7 +55,7 @@ int currentWindowHeight;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-// Wave motion
+// Wave motion tracking
 int curWaveHeight = 0;
 bool waveFlip = false;
 float lastWaveMovement = 0;
@@ -93,6 +101,14 @@ int main()
         log("GLEW started successfully.");
     }
 
+    // Window settings
+    glViewport(0, 0, ResX, ResY);
+    glfwSetFramebufferSizeCallback(mainWindow, framebuffer_resize_callback);
+    glfwSetCursorPosCallback(mainWindow, mouse_callback);
+    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
+
     // Shader definition
     ShaderInfo shaders[] =
     {
@@ -106,16 +122,11 @@ int main()
     glUseProgram(program);
     log("Shaders successfully loaded.");
 
+    // Shader parameters
     int mvpVar = glGetUniformLocation(program, "mvpIn");
-    int filterVar = glGetUniformLocation(program, "applyFilter");
-    int isSand = glGetUniformLocation(program, "isSand"); // For disabling texture coordinates
+    int filterVar = glGetUniformLocation(program, "applyFilter"); // Underwater filter
+    int isSand = glGetUniformLocation(program, "isSand"); // For disabling texture coordinates, possibly use later
 
-
-    // Window settings
-    glViewport(0, 0, ResX, ResY);
-    glfwSetFramebufferSizeCallback(mainWindow, framebuffer_resize_callback);
-    glfwSetCursorPosCallback(mainWindow, mouse_callback);
-    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Ship model
     ModelObject Ship;
@@ -143,7 +154,7 @@ int main()
     Water.projection = translate(Water.projection, vec3(-3.0f, 0.0f, -3.0f));
     Water.projection = scale(Water.projection, vec3(0.9f, 1.0f, 0.9f));
 
-    reference_wrapper<ModelObject> ModelsToRender[] = { Ship, Sand, Water };
+    reference_wrapper<ModelObject> ModelsToRender[] = { Ship, Sand, Water }; // Using references otherwise copies are made and nothing changes
 
     // Camera setup
     mainCamera.SetSpeed(CameraSpeed);
@@ -151,7 +162,7 @@ int main()
     mainCamera.SetPosition(vec3(0.0f, 0.1f, 1.0f));
     mainCamera.projection = perspective(radians(FOV), (float)ResX / (float)ResY, 0.01f, 100.0f);
 
-    glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE); // Used these to prevent glitching, possibly unrequired but keeping as everything works
     glEnable(GL_DEPTH_TEST);
 
     log("Starting render loop.");
@@ -162,6 +173,8 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+
+        // Events
         if (mainCamera.GetPosition().y >= 0) {
             glClearColor(SkyColor[0] / 255, SkyColor[1] / 255, SkyColor[2] / 255, 1);
             glUniform1i(filterVar, 0);
@@ -194,9 +207,8 @@ int main()
         //Input keyboard data
         mainCamera.InputData(mainWindow,deltaTime);
 
-        //Rendering
+        // Rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
         mat4 projection = mainCamera.projection;
         mat4 view = mainCamera.GetViewMatrix();
