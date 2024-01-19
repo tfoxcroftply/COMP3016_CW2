@@ -25,28 +25,30 @@ ObjectData GenerateTerrain(int width, int height) {
     // Generate vertices
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
-            vertices.push_back((float)x);
+            vertices.push_back((float)x);                                            ///// generates in the same vertex + coords format as the quad
             vertices.push_back(GetRandomHeight() * Intensity); // height of terrain
             vertices.push_back((float)y);
 
-            vertices.push_back((float)x / (width - 1));
+            vertices.push_back((float)x / (width - 1)); // tex coords
             vertices.push_back((float)y / (height - 1));
         }
     }
 
-    for (int x = 0; x < width - 1; ++x) {
-        for (int y = 0; y < height - 1; ++y) {
-            int topLeft = x * height + y;
-            int topRight = topLeft + 1;
-            int bottomLeft = (x + 1) * height + y;
-            int bottomRight = bottomLeft + 1;
+    for (int row = 0; row < width - 1; ++row) { // rewritten so it makes sense
+        for (int column = 0; column < height - 1; ++column) {
+            // Calculate indices of the square's corners
+            int topLeftIndex = row * height + column;
+            int topRightIndex = topLeftIndex + 1;
+            int bottomLeftIndex = (row + 1) * height + column;
+            int bottomRightIndex = bottomLeftIndex + 1;
 
-            indices.push_back(topLeft);
-            indices.push_back(bottomLeft);
-            indices.push_back(topRight);
-            indices.push_back(topRight);
-            indices.push_back(bottomLeft);
-            indices.push_back(bottomRight);
+            indices.push_back(topLeftIndex); // first triangle
+            indices.push_back(bottomLeftIndex);
+            indices.push_back(topRightIndex);
+
+            indices.push_back(topRightIndex); // second triangle
+            indices.push_back(bottomLeftIndex);
+            indices.push_back(bottomRightIndex);
         }
     }
 
