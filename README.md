@@ -31,3 +31,8 @@ However, upon submitting the pitch, it conflicted with someone else’s project,
 My code started from Lab 5, having a simple quad loaded with a texture on top. I repurposed this to be the ocean surface, although this was later scrapped as my skills developed and I was able to procedurally generate instead. The procedural generation function generates as quads, as having a quad displayed is required to pass. Similar texture loading is used for the ocean and sand.
 To make mine unique, I wanted to do a little bit of fragment shader manipulation. If the camera goes below water, the scene changes. The backdrop turns to a darker blue, and all textures will have a blue filter applied to them, mimicking an underwater view. 
 Additionally, I added some simple movements to my project to make the scene less static. Every model loaded in has some sort of timed animation applied to it, an example being the ship wobbling in the water.
+
+# External sources
+- http://www.opengl-tutorial.org/beginners-tutorials/tutorial-7-model-loading/
+- https://learnopengl.com/
+- https://en.cppreference.com/w/
