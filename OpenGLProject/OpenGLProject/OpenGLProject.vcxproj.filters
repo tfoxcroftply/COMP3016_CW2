@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\objects">
       <UniqueIdentifier>{de134d43-be61-49c1-a725-342f0e0a2b08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\logs">
+      <UniqueIdentifier>{be20abed-3ef2-4399-8e12-bfaf3d66953c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shaders.h">
@@ -85,5 +88,10 @@
     <None Include="resources\shaders\base.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="logs\empty.txt">
+      <Filter>Resource Files\logs</Filter>
+    </Text>
   </ItemGroup>
 </Project>
