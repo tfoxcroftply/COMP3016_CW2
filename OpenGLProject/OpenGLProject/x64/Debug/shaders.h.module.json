@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\Shaders.h.obj",
+            "outputs": [
+                "C:\\Users\\Tobey\\Documents\\GitHub\\COMP3016_CW2\\OpenGLProject\\OpenGLProject\\x64\\Debug\\vc143.pdb",
+                "x64\\Debug\\",
+                "C:\\Users\\Tobey\\Documents\\GitHub\\COMP3016_CW2\\OpenGLProject\\OpenGLProject\\x64\\Debug\\Shaders.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "Shaders.h",
+                    "source-path": "c:\\users\\tobey\\documents\\github\\comp3016_cw2\\openglproject\\openglproject\\shaders.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

@@ -12,7 +12,7 @@ using namespace std;
 float Intensity = 0.1f;
 float Scale = 2;
 
-float GetRandomHeight() {
+float GetRandomHeight() { // returns random between 0 and 1
     static mt19937 randomEngine(std::random_device{}());
     static uniform_real_distribution<float> distribution(0.0f, 1.0f);
     return distribution(randomEngine);
@@ -56,7 +56,7 @@ ObjectData GenerateTerrain(int width, int height) {
         }
     }
 
-    GLuint vao, vbo, ebo;
+    GLuint vao, vbo, ebo; // same as other parts
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 

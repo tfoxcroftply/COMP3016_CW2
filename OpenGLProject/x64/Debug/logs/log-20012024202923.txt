@@ -1,0 +1,16 @@
+
+01/20/24 20:29:23
+[20:29:23.320]: Starting program.
+[20:29:23.453]: GLFW started successfully.
+[20:29:23.609]: Attempting to initialise GLEW.
+[20:29:23.612]: GLEW started successfully.
+[20:29:23.613]: Shader successfully loaded.
+[20:29:23.613]: Shader successfully loaded.
+[20:29:23.619]: Texture loaded successfully. Path 'resources/textures/metal.png'
+[20:29:23.642]: Texture loaded successfully. Path 'resources/textures/plastic.png'
+[20:29:23.666]: Texture loaded successfully. Path 'resources/textures/plastic.png'
+[20:29:23.671]: Texture loaded successfully. Path 'resources/textures/sand.png'
+[20:29:23.677]: Texture loaded successfully. Path 'resources/textures/water.png'
+[20:29:23.682]: Texture loaded successfully. Path 'resources/textures/ripples.png'
+[20:29:23.683]: Starting render loop.
+[20:29:24.739]: Render loop exiting.

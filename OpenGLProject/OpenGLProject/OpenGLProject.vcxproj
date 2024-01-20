@@ -166,9 +166,6 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
     <None Include="resources\shaders\base.frag" />
     <None Include="resources\shaders\base.vert" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="logs\empty.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

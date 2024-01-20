@@ -107,14 +107,14 @@ int main()
     }
 
     // Window settings
-    glViewport(0, 0, ResX, ResY);
+    glViewport(0, 0, ResX, ResY); // set resolution and callbacks
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_resize_callback);
     glfwSetCursorPosCallback(mainWindow, mouse_callback);
-    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // prevents mouse from escaping window
 
 
     // Shader definition
-    ShaderInfo shaders[] =
+    ShaderInfo shaders[] = // Info that gets passed to the shader
     {
         { GL_VERTEX_SHADER, "resources/shaders/base.vert" },
         { GL_FRAGMENT_SHADER, "resources/shaders/base.frag" },
@@ -139,7 +139,7 @@ int main()
 
     // Ship model
     ModelObject Ship; // Declare a new ship object
-    Ship.data = loadOBJ("resources/objects/ship2.obj"); // Give it some data from obj loader
+    Ship.data = loadOBJ("resources/objects/ship.obj"); // Give it some data from obj loader
     Ship.ApplyTexture("resources/textures/metal.png"); // Give it a texture id for future referencing
 
     Ship.projection = scale(Ship.projection, vec3(0.1f, 0.1f, 0.1f)); // Set some positions for it
@@ -147,7 +147,7 @@ int main()
 
     // Ship model. Above repeated for the rest of the models
     ModelObject Ball;
-    Ball.data = loadOBJ("resources/objects/ball2.obj");
+    Ball.data = loadOBJ("resources/objects/ball.obj");
     Ball.ApplyTexture("resources/textures/plastic.png");
 
     Ball.projection = translate(Ball.projection, vec3(1.0f, 0.04f, 1.0f));
@@ -163,13 +163,13 @@ int main()
     BuoyRing.projection = scale(BuoyRing.projection, vec3(0.05f, 0.05f, 0.05f));
 
     // Quad sample. I wasn't sure if a standalone quad was required
-    ModelObject SampleQuad;
-    SampleQuad.data = GetQuad(); // Instead of loading a texture, use the quad header to get the data
-    SampleQuad.ApplyTexture("resources/textures/sand.png");
+    ModelObject Sand;
+    Sand.data = GetQuad(); // Instead of loading a texture, use the quad header to get the data
+    Sand.ApplyTexture("resources/textures/sand.png");
 
-    SampleQuad.projection = rotate(SampleQuad.projection, radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
-    SampleQuad.projection = translate(SampleQuad.projection, vec3(0.0f, 0.0f, -5.0f));
-    SampleQuad.projection = scale(SampleQuad.projection, vec3(0.01f,0.01f,0.01f));
+    Sand.projection = rotate(Sand.projection, radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+    Sand.projection = translate(Sand.projection, vec3(0.0f, 0.0f, -1.0f));
+    Sand.projection = scale(Sand.projection, vec3(1.0f,1.0f,1.0f));
 
     // Water model
     ModelObject Water;
@@ -180,7 +180,7 @@ int main()
     Water.projection = translate(Water.projection, vec3(-3.0f, 0.0f, -3.0f));
     Water.projection = scale(Water.projection, vec3(0.9f, 1.0f, 0.9f));
 
-    reference_wrapper<ModelObject> ModelsToRender[] = { Ship, SampleQuad, Water, Ball, BuoyRing }; // Using references otherwise copies are made and results in movement requests changing nothing
+    reference_wrapper<ModelObject> ModelsToRender[] = { Ship, Sand, Water, Ball, BuoyRing }; // Using references otherwise copies are made and results in movement requests changing nothing
 
     // Camera setup
     mainCamera.SetSpeed(CameraSpeed); // Get some variables from the top and send it to the main camera object
@@ -212,18 +212,18 @@ int main()
         if (currentFrame > lastWaveMovement + waveUpdateFreq) { // This tracks whether the calculations should run or not. i dont want it to be dependent on framerate
             lastWaveMovement = currentFrame; // update the tracker for next loop
             if (waveFlip) {
-                if (curWaveHeight < waveHeightLimit) {
-                    curWaveHeight++;
+                if (curWaveHeight < waveHeightLimit) { // if under the limit ..
+                    curWaveHeight++; // then continue raising wave
                     Water.projection = translate(Water.projection, vec3(0.0f, -0.0001f, -0.0001f));
                     Ball.projection = translate(Ball.projection, vec3(0.0f, -0.001f, 0.0f));
                     BuoyRing.projection = translate(BuoyRing.projection, vec3(0.0f, -0.001f, 0.0f));
                 }
                 else {
-                    waveFlip = !waveFlip;
+                    waveFlip = !waveFlip; // otherwise tell it to go the other direction
                 }
             }
             else {
-                if (curWaveHeight > 0) {
+                if (curWaveHeight > 0) { // Same here but for the other side and direction
                     curWaveHeight--;
                     Water.projection = translate(Water.projection, vec3(0.0f, 0.0001f, 0.0001f));
                     Ball.projection = translate(Ball.projection, vec3(0.0f, 0.001f, 0.0f));
@@ -235,7 +235,7 @@ int main()
             }
         }
 
-        if (currentFrame > lastRotMovement + rotUpdateFreq) {
+        if (currentFrame > lastRotMovement + rotUpdateFreq) { // Similar method for ship rotation, instead of height its rotation
             lastRotMovement = currentFrame;
             if (rotFlip) {
                 if (curShipRot < (float)rotLimit) {
@@ -266,12 +266,12 @@ int main()
         mat4 projection = mainCamera.projection;
         mat4 view = mainCamera.GetViewMatrix();
 
-        for (auto& modelRef : ModelsToRender) {
-            ModelObject& currentObject = modelRef.get();
-            mat4 mvp = projection * view * currentObject.projection;
-            glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp));
+        for (auto& modelRef : ModelsToRender) { // For every model reference, render it
+            ModelObject& currentObject = modelRef.get(); // get up to date model from reference
+            mat4 mvp = projection * view * currentObject.projection; // get the new mvp
+            glUniformMatrix4fv(mvpVar, 1, GL_FALSE, value_ptr(mvp)); // send the mvp to the shader
 
-            unsigned int MixTexture = currentObject.GetSecondaryTexture();
+            unsigned int MixTexture = currentObject.GetSecondaryTexture();// attempt to load secondary texture
 
 
             glUniform1i(secondaryTextureEnabled, 0); // Reset just in case
@@ -284,8 +284,8 @@ int main()
                 glBindTexture(GL_TEXTURE_2D, currentObject.GetSecondaryTexture());
             }
 
-            glBindVertexArray(currentObject.data.vao);
-            glDrawElements(GL_TRIANGLES, currentObject.data.vertexCount, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(currentObject.data.vao); // grab the assigned vao
+            glDrawElements(GL_TRIANGLES, currentObject.data.vertexCount, GL_UNSIGNED_INT, 0); // and then draw it
         }
 
 
@@ -298,7 +298,7 @@ int main()
 
 
     log("Render loop exiting.");
-    glfwTerminate();
+    glfwTerminate(); // ensures that everything finishes
     return 0;
 }
 

@@ -1,0 +1,17 @@
+﻿  Scanning sources for module dependencies...
+  LINK : program database C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\x64\Debug\OpenGLProject.pdb missing; performing full link
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  OpenGLProject.vcxproj -> C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\x64\Debug\OpenGLProject.exe
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\ball.obj
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\lifebuoy.obj
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\ship.obj
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.frag
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.vert
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\metal.png
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\plastic.png
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\ripples.png
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\sand.png
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\water.png
+  10 File(s) copied
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\glew32.dll
+  1 File(s) copied

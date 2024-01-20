@@ -15,15 +15,15 @@
 using namespace std;
 using namespace glm;
 
-void Camera::SetSpeed(float inputSpeed) {
+void Camera::SetSpeed(float inputSpeed) { // sets camera speed
     speed = inputSpeed;
 }
 
-void Camera::SetSensitivity(float inputSens) {
+void Camera::SetSensitivity(float inputSens) { // sets camera sensitivity
     sensitivity = inputSens;
 }
 
-void Camera::InputData(GLFWwindow* inputWindow, float delta) {
+void Camera::InputData(GLFWwindow* inputWindow, float delta) { // reads all key data and applies neccessary transformations
     float tempSpeed = speed * delta;
     if (glfwGetKey(inputWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -53,43 +53,43 @@ void Camera::InputData(GLFWwindow* inputWindow, float delta) {
     }
 };
 
-mat4 Camera::GetViewMatrix() {
+mat4 Camera::GetViewMatrix() { // encapsulated view matrix
     mat4 view = lookAt(position, position + front, up);
     return view;
 }
 
-void Camera::MouseInput(GLFWwindow* inputWindow, double xpos, double ypos) {
+void Camera::MouseInput(GLFWwindow* inputWindow, double xpos, double ypos) { // parse mouse movements
     if (!mouseHasMoved)
     {
         lastMouseX = xpos;
         lastMouseY = ypos;
-        mouseHasMoved = true;
+        mouseHasMoved = true; // for setting the first movement as baseline
     }
 
-    float xChange = xpos - lastMouseX;
+    float xChange = xpos - lastMouseX; // apply changes
     float yChange = lastMouseY - ypos;
     lastMouseX = xpos;
     lastMouseY = ypos;
 
-    xChange *= sensitivity;
+    xChange *= sensitivity; // sensitivity as multiplier
     yChange *= sensitivity;
 
-    mouseYaw += xChange;
+    mouseYaw += xChange; // apply changes
     mousePitch += yChange;
 
-    mousePitch = std::clamp(mousePitch, -89.9f, 89.9f); // Must still use std:: for some reason
+    mousePitch = std::clamp(mousePitch, -89.9f, 89.9f); // must still use std:: for some reason. limits camera movement
 
-    front = normalize(vec3(
+    front = normalize(vec3( // sets the new aiming vector
         cos(radians(mouseYaw)) * cos(radians(mousePitch)), 
         sin(radians(mousePitch)), 
         sin(radians(mouseYaw)) * cos(radians(mousePitch))
 ));
 }
 
-vec3 Camera::GetPosition() {
+vec3 Camera::GetPosition() { // encapsulated position
     return position;
 }
 
-void Camera::SetPosition(vec3 inputPos) {
+void Camera::SetPosition(vec3 inputPos) { // sets encapsulated position
     position = inputPos;
 }

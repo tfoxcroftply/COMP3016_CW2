@@ -11,16 +11,16 @@
 
 using namespace std;
 
-struct Vertex {
+struct Vertex { // simple structure for holding vertex/texcoords data
     float position[3];
     float texCoord[2];
 };
 
 ObjectData loadOBJ(const char* path) {
-    vector<float> temp_vertices; // Temporary vertex positions
-    vector<float> temp_texCoords; // Temporary texture coordinates
-    vector<Vertex> vertices; // Final vertex data
-    vector<unsigned int> indices;
+    vector<float> temp_vertices; // temporary vertex positions
+    vector<float> temp_texCoords; // temporary texture coordinates
+    vector<Vertex> vertices; // final vertex data
+    vector<unsigned int> indices; // final indices
     ifstream file(path);
     string line;
 
@@ -28,7 +28,7 @@ ObjectData loadOBJ(const char* path) {
         log("Model failed to load. Path: '" + string(path) + "'", LogType::Error);
     }
 
-    while (getline(file, line)) {
+    while (getline(file, line)) { // loop for every line in the obj file
         std::istringstream iss(line);
         std::string prefix;
         iss >> prefix;
@@ -44,32 +44,33 @@ ObjectData loadOBJ(const char* path) {
             temp_texCoords.insert(temp_texCoords.end(), { u, v });
         }
         else if (prefix == "f") { // f in obj means faces
-            std::string vertex1, vertex2, vertex3;
-            iss >> vertex1 >> vertex2 >> vertex3;
+            std::string vertexInfo[3];
             unsigned int vIndex[3], tIndex[3];
-            sscanf(vertex1.c_str(), "%d/%d", &vIndex[0], &tIndex[0]);
-            sscanf(vertex2.c_str(), "%d/%d", &vIndex[1], &tIndex[1]);
-            sscanf(vertex3.c_str(), "%d/%d", &vIndex[2], &tIndex[2]);
 
+            for (int i = 0; i < 3; i++) {
+                iss >> vertexInfo[i];
+                
+                if (sscanf(vertexInfo[i].c_str(), "%d/%d", &vIndex[i], &tIndex[i]) != 2) {
+                    log("Face data is in an unknown format.", LogType::Error);
+                }
 
-            for (int i = 0; i < 3; ++i) {
-                vIndex[i] -= 1;
-                tIndex[i] -= 1;
+                vIndex[i]--; // vertex 
+                tIndex[i]--; // texture coord
 
-                Vertex vertex;
-                vertex.position[0] = temp_vertices[3 * vIndex[i]];
+                Vertex vertex; // remake the vertex from scratch
+                vertex.position[0] = temp_vertices[3 * vIndex[i]]; // in the format of (v,v,v, tc,tc) like the quad
                 vertex.position[1] = temp_vertices[3 * vIndex[i] + 1];
                 vertex.position[2] = temp_vertices[3 * vIndex[i] + 2];
                 vertex.texCoord[0] = temp_texCoords[2 * tIndex[i]];
                 vertex.texCoord[1] = temp_texCoords[2 * tIndex[i] + 1];
 
-                vertices.push_back(vertex);
+                vertices.push_back(vertex); // put the now complete vertex into data
                 indices.push_back(indices.size());
             }
         }
     }
 
-    GLuint vao, vbo, ebo;
+    GLuint vao, vbo, ebo; // Do the same thing as the other scripts
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ebo);
@@ -93,5 +94,5 @@ ObjectData loadOBJ(const char* path) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    return { vao, static_cast<GLsizei>(indices.size()) };
+    return { vao, static_cast<GLsizei>(indices.size()) }; // return vao and size for drawing
 }

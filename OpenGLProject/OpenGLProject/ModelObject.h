@@ -12,16 +12,16 @@ using namespace std;
 
 class ModelObject {
 private:
-    unsigned int texture = -1;
+    unsigned int texture = -1; // encapsulated ids, can only be set through functions
     unsigned int textureMix = -1;
 
 public:
     ObjectData data;
-    mat4 projection = mat4(1.0f);
+    mat4 projection = mat4(1.0f); // defaults
 
-    ModelObject(){};
+    ModelObject(){}; // constructor
 
-    void ApplyTexture(string Input) {
+    void ApplyTexture(string Input) { // functions that force loading
         texture = GenerateTexture(Input);
     }
 
@@ -29,7 +29,7 @@ public:
         textureMix = GenerateTexture(Input);
     }
 
-    unsigned int GetTexture() {
+    unsigned int GetTexture() { // return encapsulated data
         return texture;
     }
 

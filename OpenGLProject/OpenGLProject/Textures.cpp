@@ -14,23 +14,23 @@ using namespace std;
 
 int GenerateTexture(string FileName) {
     unsigned int texture; //Index
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glGenTextures(1, &texture); // bind texture
+    glBindTexture(GL_TEXTURE_2D, texture); // set current texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set some wrapping settings
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
-    int width, height, colourChannels;
-    unsigned char* data = stbi_load(FileName.c_str(), &width, &height, &colourChannels, 0);
+    int width, height, colourChannels; // parameters for stbi
+    unsigned char* data = stbi_load(FileName.c_str(), &width, &height, &colourChannels, 0); // use stbi to load
     if (data) {
         log("Texture loaded successfully. Path '" + FileName + "'");
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data); // set the image in opengl from stbi
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else {
         return -1;
         log("Texture failed to load. Path: '" + FileName + "'", LogType::Error);
     }
-    return texture;
+    return texture; // return new index
 
-    stbi_image_free(data);
+    stbi_image_free(data); // reset cleanup
 }
