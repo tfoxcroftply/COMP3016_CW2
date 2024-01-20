@@ -34,12 +34,16 @@ ObjectData GenerateTerrain(int width, int height) {
         }
     }
 
-    for (int row = 0; row < width - 1; ++row) { // rewritten so it makes sense
+    for (int row = 0; row < width - 1; ++row) {
+        // Initialize the starting indices for the row
+        int startTopLeftIndex = row * height;
+        int startBottomLeftIndex = (row + 1) * height;
+
         for (int column = 0; column < height - 1; ++column) {
-            // Calculate indices of the square's corners
-            int topLeftIndex = row * height + column;
+            // Calculate indices based on the starting indices
+            int topLeftIndex = startTopLeftIndex + column;
             int topRightIndex = topLeftIndex + 1;
-            int bottomLeftIndex = (row + 1) * height + column;
+            int bottomLeftIndex = startBottomLeftIndex + column;
             int bottomRightIndex = bottomLeftIndex + 1;
 
             indices.push_back(topLeftIndex); // first triangle

@@ -12,7 +12,8 @@ using namespace std;
 
 class ModelObject {
 private:
-    unsigned int texture;
+    unsigned int texture = -1;
+    unsigned int textureMix = -1;
 
 public:
     ObjectData data;
@@ -22,12 +23,17 @@ public:
 
     void ApplyTexture(string Input) {
         texture = GenerateTexture(Input);
-        if (texture == -1) {
-            log("Texture failed to load. Path: '" + Input + "'", LogType::Error);
-        }
+    }
+
+    void ApplySecondaryTexture(string Input) {
+        textureMix = GenerateTexture(Input);
     }
 
     unsigned int GetTexture() {
         return texture;
+    }
+
+    unsigned int GetSecondaryTexture() {
+        return textureMix;
     }
 };
