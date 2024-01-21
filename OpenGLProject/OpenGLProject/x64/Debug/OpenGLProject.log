@@ -1,34 +1,9 @@
 ﻿  Scanning sources for module dependencies...
-  Shaders.h
-  Compiling...
-  Shaders.h
-  Main.cpp
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\ModelLoad.h(68,47): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned int
-          ]
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Main.cpp(30,25): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Main.cpp(183,59): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Main.cpp(183,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Main.cpp(205,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  Shaders.cpp
-  Log.cpp
-  Camera.cpp
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(64,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(65,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(69,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(70,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(71,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\Camera.cpp(72,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Textures.cpp
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   OpenGLProject.vcxproj -> C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\x64\Debug\OpenGLProject.exe
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\ball.obj
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\lifebuoy.obj
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\objects\ship.obj
-  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\asdas.frag
+  C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.frag
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\shaders\base.vert
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\metal.png
   C:\Users\Tobey\Documents\GitHub\COMP3016_CW2\OpenGLProject\OpenGLProject\resources\textures\plastic.png
