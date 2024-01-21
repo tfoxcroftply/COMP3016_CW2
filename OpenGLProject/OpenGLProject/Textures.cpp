@@ -27,8 +27,8 @@ int GenerateTexture(string FileName) {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else {
-        return -1;
         log("Texture failed to load. Path: '" + FileName + "'", LogType::Error);
+        return -1;
     }
     return texture; // return new index
 

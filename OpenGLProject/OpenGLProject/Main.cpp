@@ -123,6 +123,13 @@ int main()
 
     // Shader loading
     program = LoadShaders(shaders);
+
+    if (program == 0) {
+        log("Shader loading failed, terminating.", LogType::Fatal);
+        glfwTerminate();
+        return -1;
+    }
+
     glUseProgram(program);
 
     // Shader parameters

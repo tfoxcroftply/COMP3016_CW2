@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
 #include "ObjectData.h"
 #include <random>
+#include "Log.h"
 
 using namespace std;
 
@@ -54,6 +55,10 @@ ObjectData GenerateTerrain(int width, int height) {
             indices.push_back(bottomLeftIndex);
             indices.push_back(bottomRightIndex);
         }
+    }
+
+    if (vertices.size() == 0 || indices.size() == 0) {
+        log("Procedural generation failed.", LogType::Fatal);
     }
 
     GLuint vao, vbo, ebo; // same as other parts

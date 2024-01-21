@@ -163,7 +163,7 @@ if not exist $(TargetDir)\logs mkdir $(TargetDir)\logs</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
-    <None Include="resources\shaders\base.frag" />
+    <None Include="resources\shaders\asdas.frag" />
     <None Include="resources\shaders\base.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

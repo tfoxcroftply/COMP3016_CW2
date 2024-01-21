@@ -82,7 +82,7 @@
     <None Include="glew32.dll">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\base.frag">
+    <None Include="resources\shaders\asdas.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="resources\shaders\base.vert">
